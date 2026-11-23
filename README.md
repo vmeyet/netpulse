@@ -19,7 +19,19 @@ Your internet speed and the health of the services you depend on, one click away
 
 ## Install
 
-Requirements: macOS 13+, Swift 5.9+ (Xcode or the command line tools).
+Requirements: macOS 13+.
+
+1. Download `NetPulse-<version>.dmg` from [Releases](https://github.com/vmeyet/netpulse/releases).
+2. Open it and drag **NetPulse** to **Applications**.
+3. First launch: the app is not notarized, so macOS blocks it. Go to **System Settings → Privacy & Security** and click **Open Anyway**. Or run:
+
+   ```sh
+   xattr -dr com.apple.quarantine /Applications/NetPulse.app
+   ```
+
+### Build from source
+
+Requirements: Swift 5.9+ (Xcode or the command line tools).
 
 > If the build fails with `external macro implementation type 'SwiftUIMacros.StateMacro' could not be found`, your command line tools use an SDK whose SwiftUI macros they don't ship. Install Xcode, or point to an older SDK: `SDKROOT=$(xcrun --show-sdk-path --sdk macosx26.5) ./install.sh`.
 
@@ -28,6 +40,14 @@ Requirements: macOS 13+, Swift 5.9+ (Xcode or the command line tools).
 ```
 
 This builds a release, copies `NetPulse.app` to `/Applications` and launches it. Pass another folder to install elsewhere: `./install.sh ~/Applications`.
+
+`./scripts/package-dmg.sh` builds the DMG into `dist/`. The version comes from `git describe --tags`, or set `VERSION`. Set `DEVELOPER_ID` to sign with a Developer ID, and `NOTARY_PROFILE` (a `notarytool` keychain profile) to notarize.
+
+### Release
+
+Tag and push: `git tag v1.2.0 && git push origin v1.2.0`. The release workflow builds the DMG and attaches it to a GitHub Release.
+
+The icon source is `Resources/AppIcon.svg`. After editing it, run `./scripts/make-icon.sh` and commit `Resources/AppIcon.icns`.
 
 ## Configure
 
